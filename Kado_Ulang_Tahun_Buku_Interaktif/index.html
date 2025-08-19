@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Ultah Spesial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .page {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-bottom: 30px;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1, h2, h3 {
+            color: #FF6B6B;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            background-color: #FFD166;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .icon:hover {
+            transform: scale(1.1) rotate(10deg);
+            background-color: #FF9F43;
+        }
+        
+        .icon i {
+            font-size: 30px;
+            color: white;
+        }
+        
+        .note {
+            background-color: #F7FFF7;
+            border-left: 4px solid #4ECDC4;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .photo-grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        
+        .photo-grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+        
+        .photo-grid-5 {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+        
+        .photo-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-grid img:hover {
+            transform: scale(1.03);
+        }
+        
+        .btn {
+            background-color: #4ECDC4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background-color: #1A936F;
+            transform: translateY(-3px);
+        }
+        
+        .confirmation-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .secret-door-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .secret-door-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .secret-door-input input {
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: 2px solid #4ECDC4;
+            width: 70%;
+            max-width: 300px;
+        }
+
+        .confirmation-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: popIn 0.4s ease;
+        }
+        
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .video-container {
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        video {
+            width: 100%;
+            border-radius: 8px;
+        }
+        
+        .video-lock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .video-lock h3 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .secret-input {
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: none;
+            margin-bottom: 15px;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        .message-form {
+            margin-top: 40px;
+            background-color: #F0F8FF;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .heart {
+            position: fixed;
+            font-size: 20px;
+            color: #FF6B6B;
+            animation: float 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .page {
+                padding: 20px;
+            }
+            
+            .icon-container {
+                gap: 20px;
+            }
+            
+            .icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .photo-grid-3, 
+            .photo-grid-4, 
+            .photo-grid-5 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Music Player -->
+    <audio id="bgMusic" loop>
+        <source src="proyek/Pamungkas - Monolog (Lyrics Video).mp3" type="audio/mpeg">
+    </audio>
+    <audio id="secretMusic" loop style="display:none">
+        <source src="secret-song.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="quizMusic" loop style="display:none">
+        <source src="secret.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="quizMusic" loop style="display:none">
+        <source src="quiz.mp3" type="audio/mpeg">
+    </audio>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('bgMusic').play();
+        });
+    </script>
+    <div class="container">
+        <!-- Initial Action Page -->
+        <div class="page active" id="init-page">
+            <h1>Ada apakah ini</h1>
+            <p style="text-align: center;">Klik 3 ikon berikut untuk membuka secret book...</p>
+            
+            <div class="icon-container">
+                <div class="icon" id="icon1" onclick="clickIcon(1)">
+                    <i class="fas fa-birthday-cake"></i>
+                </div>
+                <div class="icon" id="icon2" onclick="clickIcon(2)">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="icon" id="icon3" onclick="clickIcon(3)">
+                    <i class="fas fa-gift"></i>
+                </div>
+            </div>
+            
+            <div id="init-notes">
+                <!-- Notes will appear here as icons are clicked -->
+            </div>
+        </div>
+        
+        <!-- Cover Page -->
+        <div class="page" id="cover-page">
+            <h1>Happy Birthday my lovvv!</h1>
+            <div style="text-align: center; margin: 30px 0;">
+                <img src="proyek/WhatsApp Image 2025-08-16 at 04.50.14_1b445cf8.jpg" alt="Cover hadiah ulang tahun dengan balon warna-warni dan pita" style="max-width: 100%; border-radius: 10px;"/>
+            </div>
+            <p style="text-align: center; font-size: 18px;">
+                selamat ulang tahun sayang kuuuu cian" ku, cieeeee yg udh 26 nihhh makin tambah aja usia nya cian" ku ini gemes" nya aku ini loh utuna acu dia ultahhh iya?😍, semoga panjang umur yah sayang acu semoga hari ini penuh kebahagian dan selalu ad cia yang happy" ini lohhhh, utuna tayang cu ada disini diaaaaa😜🐙( nanti baca nya satu" yah cayang acuuuu jangan terlalu telbulu" dia jangan cedih juga otey?) btw ada hadiah di ahir loh tapi janji yah baca dari awal yaaa hiks. cia nyiapin semuanya ga singkat loh utuna acu dia ultah Iyaaa? CEKALI LAGI Utuna acu ultah yeayyyyyyyyyy😍🎂🎁🥳🥳🥳💕💕
+            </p>
+            
+            <button class="btn" onclick="nextPage()">Mulai Petualangan</button>
+        </div>
+        
+        <!-- Bab 1 -->
+        <div class="page" id="chapter1">
+            <h2>Mau inget" kenangan kita lagi? kalau tidak skip aj yah syng</h2>
+            <p>Otey ciap yahh? 1. 2. 3. Go. pertama" pada suatu malam sekitar jam 10-11 cia scrl" tiktok trs liat pillarkabut lagi live awal nya masuk juga cmn iseng eh pas lihat host nya yang baik tidak berkata kasar dri look nya aja kya bgus bngttt ap lgi prsnlty nya trs humble jg di satu sisi lucu juga soal nya first imprs cia ke pillar kabut kaya anak kecil lugu yang manis😋 IYA KAMU GA SALAH BACA KO PILARKABUT ITU KAYA SOSOK ANAK KECIL YANG MANISSSSSS DAN LUGU BNGT SEAKAN" BELUM TAU BANYAK HALL, dari situ dan beberapa hari ke depan rasa yg baru  muncul di hidup cia ternyata rasa nya campur aduk omg🙀 (Apakah ini rasa nya jatuh cinta😍😻💕) hari demi hari nntn live trs, mulai caper jg, post" vidio biar di notice tyus ahir nya vt pertama di notice ( link:https://vt.tiktok.com/ZSA1eGScN/ ) tyus dari situ udh mulai pd juga, sempet maksa" post vt msi inget ga gt yg mna ini yah ( link ny:https://vt.tiktok.com/ZSA1dr9LP/ ) tys papi dstu cmn ngsi comnt Keren banget ka grace😭 tyus maksa mnta post walau cia bilang 1 detik aj abis tu hapus eh ternyata beneran di hpus jujur posisi nya di situ campur aduk. marah seneng sakit hati jg sedih jg iya🥺🥲</p>
+            <P>Fase 1: tapi it kebahagiaan pertama cia yang palingggg sempurna di hidup cia cia ngerasa cia udh g butuh apa" lagi selain papi (hiks kan nuyis nya cambil nngis agi) trs pas awal" deket trs papi jg udh sering notice belain cia jg </P>
+            <p>Fase 2 yang paling cia pas papi mw go pub distu nangis bngt ngerasa di hargain jg ahir nya ga malu" lagi trs ga malu buat nyatain ke orang klo cia tu cwe papi.Trs di saat cia di gituin sma yang di live ayang belain tyus sarka sma yg bocil kematian cia lupa nma dia,disitu jg ay sampe ngambek ke mereka cuman karna ay tu ga mau cia kepikiran itu,trs g ska jg klo ad orng yg nyakitin hti cia🥺 di situ udh ngerasa seneng bngt kaya ternyta ada yah cwo yg sebaik ini? jjur ga nyangka bngt ternyata masih ad orng yg cia impikan ga macem" jg orng nya perhatian baik nya luar biasa poko nya beruntung bngt lah cia</p>
+            <p>fase ke 3 pas ayang prtma ngasi jajan ke cia di situ ga espek sama sekali cia aj g pernah berfikiran ay tu bakal kaya gt tapi di satu sisi jg seneng cia sllu ngrasa cia tu kya di jajanin langsung kya ada sosok ayang gt. distu cia ngerasa jg klo gda ay cia harus gimana masalah hp rusak trs ay sllu kasih uang makan pas cia lagi brntm sma mmi ay sllu ngertiin mood nya cia, cia lagi pengen apa ay suka usahaain itu jujur seneng bngt di perlakuin kya gt TAU GA? letak seneng nya di mana? letak seneng nya tu ada di " Ayang selalu usahain apa yg cia butuh in apa yang cia mw apa yg cia perlu di mengerti bukan cuman soal uang tapi soal perasaan mood nya cia jg ay selalu usahain yang terbaik. jadi ngerti kan apa yang bikin cia suka ke ay tu karna apa? iyap betullllll karna ay selalu USAHAIN segalanya itu jg bikin cia seneng itu bikin cia jafi sayang bngt cia dh ga ovt ke ay cia udh percya 100% ke ay cia udh yakinnnn bngt kalo collin tu beda dari smua cwo ibarat 1 banding 10000000000000 cowo collin tu cmn 0,0000000000000000000001 persen nya jjur. itu semua ga bakal bisa cia lupain sampai cia menutup mata cia bakal ingt selalu apa yang ay perlakuin ke cia apa yang ay sllu usahain ke cia ay g prnh insec ay jg yg buat insec cia perlahan menghilang walau ga smuanya ada insecure cia yang mungkin cia sndiri blm bisa ilangin sampai kapan pun tapi dengan ada nya collin mungkin suatu saat bisa hilang hhe. pokonya collin tu cwo terbaikkkk ter ter terrr pokonya cia waktu itu yakin ayang tu ga bakal aneh" ga pernah kepikirin bakal macem" sedikit pun. Namun ternyata cia salah namanya namanya manusia akan selalu kurang di segala aspek?</p>
+            <p>masuk ke fase 4 di mana ini fase yang paling cia benci selama cia hidup pikiran cia pernah terlintas " mengapa harus aku yang di perlakukan seperti ini? " dari juni tanggal 29-1 juli pikiran cia mimpi cia sudah mulai menunjukan semuanya pertama cia sllu mimpi hall yang sama ke dua cia sllu kepikiran collin di mana pun dan kapan pun ke 3 cia sudah lihat jelas respon yg ay berikan tu ada makna nya tersendiri jjur cia g nyaman tapi cia g mau memikirkan itu dulu karna di satu sisi cia takut menyinggung perasaan ay cia tkt ay ga nyaman juga maknya lebih baik cia pendam sendiri cuman dari sikap respon cara ay bales chat cia makin lama cia makin muak kaya KO BISA YAH COWO YANG CIA KAGUMIN DARI DULU CWO YG G PERNAH CIA PIKIR BAKAL GINIIN CIA KARNA BEDA DARI CWO LAIN TERNYATA SMAA AJA? dari situ mimpi ovt rasa pengen nyakitin diri lagi tu jadi kuat bngt tapi masih cia tahan sampai cia sudah mendesak ay ahir nya ay ngaku jga. di situ posisi nya lega nngis karna sakit juga iya tapi cia ngerasa apa yang ngebebanin pikiran cia ahir nya hilang rasa nya tu kaya plong bngt tapi abis itu nngis. di situ cia ngerasain kaya nngis 3hri 3 mlm ga makan 3 hari smpe kambuh skit nya. rasa sakit akan hati ga pernah ilang sampai saat ini collin berusaha buat nenangin cia ngeyakinin cia juga kalau collin tu ga bakal kaya lagi tapi tau ga apa yang buat cia SAKIT BANGET? iyap benar "AY NGERASA KURANG KARNA KOMUNIKASI NYA TAPI TAU TIDAK ALASAN CIA SUKA SAMA AY JG DULU KARNA AY MENGESAMPINGKAN HALL ITU" Tapi ahir nya cia sadar satu hal ga bakal ada semua cowo di mana pun yang bakal nerima kasus kaya gini mungkin cuman cia yang berfikiran dan kuat ngelakuin itu dari situ cia sadar dan mulai menerima semua nya walau sempet bener" kalau ay pilih dia cia udh gmw hidup benaran cia pikir itu dah cukup lebih baik cia ga ada tapi setelah itu</p>
+            <p>masuk ke yang ke 5. di fase ini sudah ad mulai perasaan senang happy walau ga kya dulu lagi udh timbul rasa percaya jg udh perlahan ngelupain walau sering ke inget sampai berujung nangis trs di saat ay sedih ay sllu nemanin mungkin fi fase ke 5 ini akan ada hall yang membuat cia sembuh dari luka itu cuman cia belum tau hhee.</p>
+            <h3>DAN SEPERTINYA CERITA NYA HARUS BERAKHIR DISINI HHE KASIAN CIA NYA NGETIK NYA PANJANG CAPE BNGT UNTUNG NYA AJA DI BELIIN ESKLIM SAM COLLIN IYEAYYYYYYY HORE 🙌 🥳🥳🥳🥳💕💕💕💕😜😍😻 PAPAI SAYANG INGET" smua hall yang cia bilang yah. AKU CIA IJIN PAMIT DAN MUNDUR DIRI SAMPAI BERTEMU DI HALAMAN SELANJUT NYA PAPAI👋🏻 BERI TEPUK TANGAN KEPADA LUTUNA ATU YEAY👏🏻😽S</h3>
+            
+            <div class="note">
+                <h3>Clue Tebakan:</h3>
+                <p>"Ingat semua cerita tadi dan clue nya fase fase"</p>
+            </div>
+            
+            <button class="btn skip-btn" onclick="showConfirmation(1)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman Isi Biasa -->
+        <div class="page" id="content1">
+            <h2>Haiii aku helena aku akan mengajak kamu mengenal masalaluku lebih dekat YEAY👏🏻😽</h2>
+            <p>Hei hei heiiiiiii, kamu lagi baca ini sambil apa duduk? berdiri? atau lagi kayang?🙀 no no yah kalau kamu lagi tiduran siap kan bantal guling dan selimut yahhhh jangan lupa otei?😍 kalau belum kamu ikutin aj yg di suruh jangan bnyk tanya atw ngeluh nanti cia gigit nih rawrrrrrr🐸 eh salah it kan kodok bkn hiu, ehhhh nkn jg yah maaf maksud cia singa🦁 hhe btw mff kalo garing😭🙏🏻 otei siap berpetualangan kemasalalu? kalo siap bilang yeayyyyy jangan lupa ke cia juga bilang yeayyyyyyy. oke lanjut kelamaan dan kebanyakan ngetik tangan lutuna acu kit klo lama" hummmmm okey ayo masuk 1.2.333333333 go</p>
+            <h3>Jangan lupa baca nya di kencengin lagi yah biar cia denger juga hehe</h3>
+            <p>Haiii aku helena atau yang kamu tau cia? atau lagi yg paling kamu tauuuu, lutuna atu? cian" ku? atau siapalah itu yang penting kamu tau diri ku hohohohoho(dengan nada bapa") okei kita awalin dari pov mami ini semua cia tulis apa yang di omongin mami jadiii jangan sedih yah okei lanjut ( " dulu waktu pas pertama mami hamil kamu awal mami aga kecewa karna mami rencana nya ga mau punya anak lagi tapi dulu mami mikir mungkin anak nya laki" jadi mami bisa senang sedikit tapi dati awal mami udah ga sreg taku nya cewe terus pas di usg ketauan ternyata beneran cewe, niat awal nya mau gugurkan cuman karna beresiko jadi di batalkan, dari situ kamu(cia) di lahirkan abis itu udah, kalau pas dari bayi sampai sekarang biasa aja sih dari dulu yang seneng banget ada nya kamu itu waipo(grandma) sama papi kamuya dari situ mami coba nerima kamu, makanya kamu mami didik supaya ga gagal jadi orang ga malu" in keluarga abis itu udah ) hhe maaf yah aga gimana ceritanya gitu okei karna papi masi sibuk dan belum bisa di tanya" in jadi langsung ke pov cia otey?</p>
+            <p>dari sd yah, cia waktu sd jjur nakal bngt😭 kaya sering kabur,buang makanan dari mami atau di bagiin ke yg lain, suka jajanin tmn cia trs ujung" nya di manfaatin😭🙏🏻 trs pas kls 4 atau 5 lupa pokonya wktu itu tu ad di suntik gitu trs tmn cia pada jilang serem takut di suntik trs ngmng katanya sakit nahhh di situ cia caper ( skip dlu btw cia emng caper dari sd😭 so maklumin aj klo ag ngeselin) nah trs cia bilang gini " ah masa di suntik doang taku helen mah udah sering bangt di suntik 1 minggu bisa 7x (di dalam hati: kaya iya aja tiap hari di suntik😭) nah trs kan ad temen cia nngis" jadi ga di suntik dulu karna msi nngis trs kan di ganti ke orang yang nah pada nunnjuk cia dalem hati cia bilang (aduhhhhh kenapa harus acu si knp ga lely aj) nah dstu cia di paksa maju sma tmn cia yg lain trs cia bilang yaudah si santai aja lagian cuman di suntik aku mah udah sering " dengan nada sombong " trs pas maju kan cia liat suntikan nya yah dstu udh pipis di celanaaaa😭 jan ketawa dulu collin cia tw u ktwa, nah trs kan nlm basah bngt tu pas guru bilang itu celana kamu ko basah si pas bngt mw di msukin suntikan nya cia lari kabur sampe nngis😭🙏🏻 5 guru ngejar cia ga dapet" ketangkep 1 x tapi yg di pegang cmn bju cia trs cia buka bjunya😭 abis itu lari saking takut nya sampe manjat pohon pas udh di bujuk turun baru lari lagi ke wc cia kunci dari dlm wkwk abis itu malu gmw sklh tapi ttp sklh😭 di omongin si tpi besok nya lagi udh pda lupa oleh cia sogok coklat wkwk kalau smp ini ga terlalu ad yg lucu si kepanjangan jg ngetik nya jadi udah dlu yah cape acu</p>
+            <p>NEXTTTTT KENANGAN TERINDAH CIAAAAAA IYEAYYYY LEGO LEGO PENCET LANJUT PENCET LANJUT</p>
+            <button class="btn" onclick="nextPage()">Lanjut</button>
+            <button class="btn skip-btn" onclick="showConfirmation(2)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman dengan 3 Foto -->
+        <div class="page" id="photo3">
+            <h2>Kisah Kita</h2>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                <img src="proyek/WhatsApp Image 2025-08-16 at 05.22.13_68611e20.jpg" alt="Foto atas" style="width:60%; border-radius:8px;">
+                <div style="text-align:center; max-width:600px;">
+                    <p style="font-style:italic; margin-bottom:15px;">"Inget ga foto di atas? dulu cia sering banget marah karna itu hhe soal nya bukan apa" kalau cwo cia muka nya di tutupin baju itu ganteng bngt takut nya yang lain sukaaaa. makanya cia suka bilang jangan tutupin hehe ganteng bingit soal ny😍💕"</p>
+                    <p>kalau yang bawah ini masih inget ga? ini loh pas bilang mw gendong anak kita nanti😍🙀 oh iya pesan cia tolong yah wujutin buat ayang gendong anak" kita anak nya harus? berapa hayo 10 yahhhhh, apa ko bilang ih ih? yaudahhhh 2 ya cian ku yeayyyy jangan permasalahin panjang lagi😭 ayang ska ngmng kemana" soal ny</p>
+                </div>
+                <img src="proyek/WhatsApp Image 2025-08-16 at 05.24.23_9a822c84.jpg" alt="Foto bawah" style="width:60%; border-radius:8px;">
+            </div>
+            
+            <!-- Guess moved to secret page -->
+            
+            <button class="btn skip-btn" onclick="showConfirmation(3)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman dengan 5 Foto -->
+        <div class="page" id="photo5">
+            <h2>potongan kenangan masa kecil</h2>
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="proyek/WhatsApp Image 2025-08-19 at 20.16.42_03989e56.jpg" alt="Foto kenangan spesial" style="width:50%; border-radius:8px;">
+            </div>
+            <div style="column-count:2; column-gap:30px; margin-bottom:20px;">
+                <p>Ciapa yang waktu sd nya pernah terpilih jadi anggota pramuka tyus di utus ke provinsi ikut jambore?????? iyayyy benal itu tayang nya acu iyeayyyyyyyyy tayang nya acu ciaapaaaaa? iya benal collinnn. hebat bangt cwo cia dulu dia sampe dapet tas sama uang 900rb tyus baik banget lagi di kasih ke papah ny tyus duit nya mau di beliin spedah wimcycle tyus yang suka hias" spedanya itu loh ciapa dia cenang bngt pasti waktu kecil di ajak main ke taman kota main mobil" an yang elektrik sama mandi" bola nya itu dia tyus water bum juga dia iyeayyy masih inget ga sebahagia apa dulu di ajak ke tempat kaya gt? sekarang pas pengen ngelakuin apa yang waktu kecil pengen pasti susah terus kan? jan cddihhhhh nanti kita main lagi yg kya gtu ya sama anak kita iyeayyyy</p>
+                <P>ciapa yang pas smp nya di ajak papah liat proyek ke kebun sawit? iya dia cian cian nya acu iyeayyy tyus ay ngalamin jg kan papah pulang dari kerjaan teyus berburu tupai dan kena mulu bidikan cowo acu ini emg hebat di segalahal kecuali setia. tyus inget ini ga waktu kecil ay ngejala ikan sama papah ke pinggir laut tyus ada ikan bandel ini taring nya di kena" in cowo acu itu emng eeeee kalo ad cia di situ udh cia bunuh dia campe nngis gitu loh cian" acu kesakitan sampai di gendong papah ke darat tyus brobat ke puskesmas. tyus yang nngis" itu mau ikut papah ke proyek sampe meronta" dia😭 plsss bagian ini cia bayangin nya lucu bngt, sampe di antar papah dan di bujuk" dia saking nngis nya, kan kta papah 2 minghu lagi papah pulang jadi jangan cedih" oteiii. btw cerita ini cia angkat dari papah kata papah ( semua kenangan itu indah mereka sll ku bahagiakan ,ehhh mereka tuak setelah tamat sekolah ku di tinggal sendirian ,ad di barat,ad di timur ,ad di selatan ,KK nya krj di PT.KMA , klinik perkebunan sawit di kuayan,dia di Papua si sintha msh kuliah di Nurtanio bandung aku ttp sabar dn berdoa sll berkati anak2ku ya Tuhan dmn pun mereka berada amin) trs cia jwb ( Sedih yah pah waktu kaya ngalir bagai air terlalu cepat buat nerima kenyataan nya, anak" Papah yang dulu masih kecil imut" Sekarang sudah kerja dan kuliah masing" Nya jauh" Lagi😭) dan respon papah? (Begitu lah kenyataan hidup nak ,kalian juga nanti kan mengalami demikian yg baik2 j yah doa PPh sukses lah kalian anak2ku dn di beri berkat) inti nya dari cerita di atas semua kenangan yang di lalui di mata orang tua itu selalu indah dan cia ingatkan lagi lebih sering lah komunikasi ke orang tua selagi sempat karna mempunyai orang tua seperti itu adalah impian bnyk orang dan collin harus bersyukur mempunyai kedua orang tua sehebat papah dan mamah. dan ada sedikit pesan dari papah ( Shalom anakku yg baik SMG cia calon menantu yg ku inginkan ,mkn lah dl dh cape ngerjain tugas2 dn ber istirahat ,ad bilang SM ABNG Collin ,jgn pernah menyerah apapun itu tantangan hidup dn jgn lupa berdoa PD Tuhan dn rajin beribadah ,tak perlu sombong dn congkak JD harapan hidupku adalah kalian anak2ku yg lusayang halrluya amin ) pesan dari mamah belum di bales" hhe dah cia chat dari lama tpi lum di bca</P>
+            </div>
+            <button class="btn skip-btn" onclick="showConfirmation(4)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman dengan 4 Foto -->
+        <div class="page" id="photo4">
+            <h2>Foto fav cia</h2>
+            <div style="text-align:center;">
+                <p>"ga ada halaman ini cuman buat foto fav cia"</p>
+                <img src="proyek/WhatsApp Image 2025-08-19 at 20.51.34_4d45e7e4.jpg" alt="Foto kebahagiaan" style="width:100%; max-width:500px; border-radius:8px; margin-top:20px;">
+            </div>
+            
+            <button class="btn" onclick="nextPage()">Lanjut</button>
+            <button class="btn skip-btn" onclick="showConfirmation(5)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman dengan 4 Foto + 1 Video -->
+        <div class="page" id="photo4-video">
+            <h2>Sebener nya cia ikut ini buat hadiah in kemenangan cia buat collin yeayy</h2>
+            <div class="photo-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <img src="proyek/WhatsApp Image 2025-08-19 at 21.00.09_6a92dedb.jpg" alt="Kejutan pertama kita" style="outline: rgb(0, 0, 0) dotted 3px; outline-offset: 1px;">
+                <img src="proyek/WhatsApp Image 2025-08-19 at 21.00.14_902fba50.jpg" alt="Momen spesial kita">
+                <img src="proyek/WhatsApp Image 2025-08-19 at 21.00.21_d45bc9ce.jpg" alt="Kenangan indah bersama">
+            </div>
+            
+            <div class="video-container">
+                <video controls id="secret-video" style="display: none;">
+                    <source src="video-special.mp4" type="video/mp4">
+                    Browser Anda tidak mendukung tag video.
+                </video>
+                
+                <div class="video-lock" id="video-lock">
+                    <h3>Video Terkunci</h3>
+                    <p>Pergi ke halaman berikutnya untuk membuka video ini</p>
+                </div>
+            </div>
+            
+            <div class="note">
+                <h3>Pintu Rahasia:</h3>
+                <p>"Masukkan tanggal jadian kita untuk membuka kejutan video"</p>
+                <input type="text" class="secret-input" id="video-date-guess" placeholder="Format: DD-MM-YYYY">
+                <button class="btn" onclick="checkVideoAccess()">Buka Video</button>
+            </div>
+            
+            <button class="btn" onclick="nextPage()">Lanjut</button>
+            <button class="btn skip-btn" onclick="showConfirmation(6)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman isi biasa kedua -->
+        <div class="page" id="content2">
+            <h2>penutup</h2>
+            <div style="text-align: center;">
+               <P>Hawo Happy besdayyy collin ILYSM WUATBB , maaf yah collin di hari yang spesial ini cia ga bisa ngadih banyak buat collin cia ga bisa ngasih perhatian langsung ke collin dan juga cia masih banyak kurang mya, selalu inget di ngertiin collin sampai ga mikirin perasaan collin jg, cia minta maaf. cia selalu marah dan ga mut tiba" tapi collin bisa buat cia balik happy lagi walau terkadang si engga yah hhe. oh iya cia mw cerita dikit🤏🏻. collin tau ga? collin tu cowo sekaligus warna di hidup cia kenapa harus cowo dan warna? simple ya karna cowo" warna" ya jelas beda_- tapi yang cia maksud cowo(collin) datang ke hidup cia sebagai pelukis, selalu melukis kenangan masa" indah, menaburkan rasa cinta ke dalam lukisan membuat hari" semakin berwarna tapi collin tau? pelukis bisa berbuat kejam kepada lukisan nya!! iya contoh nya seperti kejadian waktu itu semua yang pelukis itu lukis setelah kesalahan kecil lama" membesar dan merusak lukisan itu dan membuat lukisan yang semula indah menjadi berantakan. rasa percaya rasa khawatir rasa sayang rasa takut semua bercampur dalam 1 lukisan yang tak teratur. memang benar pelukis bisa saja menambahkan warna putih dan membuat ulang tapi pernah kan kamu pikir bahwa luka yang sebelum nya hanya di tutupin dan mungkin bisa terlihat lagi? rasa penyesalah rasa marah rasa sedih semua kluar dan saat lukisan tertimpa air(nngis) semua warna dan rasa sakit yang di rasakan hanya akan hambar, gimana cara ngatasin nya agar tidak terjadi? jagalah lukisan mu seperti pasangan mu sendiri beri cinta kasih sayang perhatian dan taburi kenangan yang ingin kamu buat persama lukisan nya, jaga lukisan baik" jangan sampai terulang lagi🥺 nah udah yeayy ag nngis yah ngetik nya tpi gpp. collin tau ga jujur masalah di kluarga cia bnyk tpi seberusaha mungkin cia gmw nunjukin cia sedih, cia sakit tapi ntah knp saat cia cerita it ke collin itu buat cia nyaman hhe dan keterusan deh oh iya kalau cia bilang tu dengerin cia paling ha suka ay bohong cia bisa tw ay bohong walau ga langsung bilang it bukan karna cia gtw tapi karna cia ingin tau sampai kapan ay mw nyimpen hall bohong sekecil itu. waktu itu cia udh bilang jangan bohong trs kenapa di ulang lagi? ay cmn bilang maaf terus ber x" tapi tidak menunjukkan perubahan, tau ga kenapa cia ga suka ay minta maaf? karna ay selalu minta maaf apa yng ay udh perbuat sebelum nya so  ia pikir buat ap di maafin nanti juga di ulang lagi, membangun kepercayaan orang tu ga mudah apalagi posisi nya cia udh gini mau sampai kapan collin menyembunyikan semuanya? kalau ad yang masih ay sembunyiin cia minta tolong kasih tau skrng abis baca ini yahhh daripada cia tau sendiri atau tau udh lama nanti makin bahaya kehubungan kita cia udh coba berusah buat percaya ay lagi. selamat ulang tahun dan hari ini adalah hari spesial ayang dan jangan lupa bahagia dan jangan lupakan tujuan ayang di sana oteii? maaf cia hanya bisa ngasih ini ke collin walau sudah berjuangama trs ujung" nya masih eror sebagian😭 karna cia masih belajar maaf. cia lum bisa ngasih kado langsung atw barang ke ayang maaf yah cian" ku sekali lagi minta maaf🥺🥲</P>
+            </div>
+            
+            <div class="note" style="margin-top:20px;">
+                <h3>Akses Pintu Rahasia:</h3>
+                <input type="password" id="secret-access" placeholder="Masukkan kode akses">
+                <button class="btn" onclick="checkDoorAccess()">Buka</button>
+                <p id="door-hint" style="display:none; margin-top:10px;">Kode: tanggal jadian kita (DD/MM/YYYY)</p>
+            </div>
+            
+            <button class="btn" onclick="nextPage()">Lanjut</button>
+            <button class="btn skip-btn" onclick="showConfirmation(7)">Lewati Halaman</button>
+        </div>
+        
+        <!-- Halaman Rahasia 1 -->
+        <div class="page" id="secret1" style="display: none;">
+            <h2>Rahasia Pertama Terbuka!</h2>
+            <p>Selamat! Kamu berhasil menemukan halaman rahasia pertama. Ini adalah hadiah kecil untuk usahamu.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e84c85e0-afe1-4c5f-9d4a-1aad8ba6de6c.png" alt="Foto kejutan pertama dengan tulisan 'Aku bangga padamu'" style="max-width: 100%; border-radius: 10px;"/>
+            </div>
+            
+            <button class="btn" onclick="nextPage()">Lanjut ke Rahasia 2</button>
+        </div>
+        
+        <!-- Halaman Rahasia 2 -->
+        <div class="page" id="secret2" style="display: none;">
+            <h2>Rahasia Kedua</h2>
+            <p>Kamu semakin dekat dengan hadiah utama! Hanya satu langkah lagi.</p>
+            
+            <div class="photo-grid" style="grid-template-columns: 1fr 1fr; margin: 30px 0;">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6aa33cab-0604-4dd0-90b9-a979c1fbb273.png" alt="Foto misterius dengan petunjuk berikutnya">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a9a047a5-f244-49a8-807b-99006e0a5be7.png" alt="Foto misterius dengan kode rahasia">
+            </div>
+            
+            <button class="btn" onclick="nextPage()">Temukan Hadiah Terakhir</button>
+        </div>
+        
+        <!-- Secret Door Page -->
+        <div class="page" id="secret-door">
+            <div class="secret-door-wrapper">
+                <h2>Pintu Rahasia</h2>
+                <p>Akses tertutup! Tunjukkan rahasia untuk masuk:</p>
+                
+                <div class="secret-door-input">
+                    <input type="password" id="secret-code" placeholder="Format: DD/MM/YYYY">
+                    <button class="btn" onclick="checkSecretCode()">Buka</button>
+                </div>
+                
+                <div id="secret-hint" style="display:none; text-align:center; margin-top:20px;">
+                    <p>Petunjuk: Tanggal jadian kita adalah 03/12/2025 (DD/MM/YYYY)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Rahasia 3 + Hadiah -->
+        <div class="page" id="secret3" style="display: none;">
+            <h2>Hadiah Terakhir!</h2>
+            <p>Inilah yang telah kamu tunggu-tunggu. Hadiah spesial untukmu di hari ulang tahunmu yang istimewa.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cbf97464-6fbb-4349-b0de-7faf32eec524.png" alt="Hadiah spesial berupa perjalanan romantis berdua" style="max-width: 100%; border-radius: 10px;"/>
+            </div>
+            
+            <p style="text-align: center; font-weight: bold;">
+                Perjalanan romantis untuk kita berdua!<br>
+                Bersiap untuk petualangan baru bersama.
+            </p>
+        </div>
+        
+        <!-- Quiz Challenge Page -->
+        <div class="page" id="quiz-page">
+            <h2>Tantangan Rahasia!</h2>
+            <p>Jawab 3 pertanyaan ini untuk membuka foto spesial:</p>
+            
+            <div class="note">
+                <h3>1. Apa rasa favorit Cia?</h3>
+                <input type="text" class="secret-input" id="quiz1" placeholder="Masukkan jawaban...">
+                <button class="btn" onclick="checkQuizAnswer(1, 'oreo')">Cek Jawaban</button>
+                <p id="hint1" style="display:none; margin-top:10px;">Hint: kaya coklat tapi bisquit</p>
+            </div>
+            
+            <div class="note">
+                <h3>2. Apa warna favorit Cia?</h3>
+                <input type="text" class="secret-input" id="quiz2" placeholder="Masukkan jawaban...">
+                <button class="btn" onclick="checkQuizAnswer(2, 'biru')">Cek Jawaban</button>
+                <p id="hint2" style="display:none; margin-top:10px;">Hint: langit</p>
+            </div>
+            
+            <div class="note">
+                <h3>3. Berapa tinggi Cia?</h3>
+                <input type="text" class="secret-input" id="quiz3" placeholder="Masukkan jawaban...">
+                <button class="btn" onclick="checkQuizAnswer(3, '157')">Cek Jawaban</button>
+                <p id="hint3" style="display:none; margin-top:10px;">Hint: beda dikit</p>
+            </div>
+            
+            <div id="quiz-reward" style="display:none; margin-top:30px; text-align:center;">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ede6a9e2-ced3-4822-ad68-68b8ebeb96a9.png" alt="Foto spesial setelah menjawab semua soal" 
+                     style="width:100%; max-width:500px; border-radius:8px;">
+            </div>
+        </div>
+
+        <!-- Secret Door Page -->
+        <div class="page" id="secret-door">
+            <div class="secret-door-wrapper">
+                <h2>Pintu Rahasia</h2>
+                <p>Akses tertutup! Tunjukkan rahasia untuk masuk:</p>
+                
+                <div class="secret-door-input">
+                    <input type="password" id="secret-code" placeholder="Format: DD/MM/YYYY">
+                    <button class="btn" onclick="checkSecretCode()">Buka</button>
+                </div>
+                
+                <div id="secret-hint" style="display:none; text-align:center; margin-top:20px;">
+                    <p>Petunjuk: Tanggal jadian kita adalah 03/12/2025 (DD/MM/YYYY)</p>
+                </div>
+            </div>
+            
+            <!-- Small photo in bottom left corner -->
+            <div style="position:fixed; bottom:20px; left:20px;">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4eaf0237-bba9-472d-b150-006b94829a8a.png" alt="Foto kenangan kecil" style="border-radius:8px;">
+            </div>
+        </div>
+
+        <!-- Blank Page -->
+        <div class="page" id="blank-page">
+            <div style="text-align:center; padding:50px 0;">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f presencee-2a93ccde5887/image/24d6705f-8488-4fc4-9675-a31e8014bb3f.png" alt="Kejutan khusus" style="border-radius:50%; margin-bottom:30px;">
+                <div class="note" style="max-width:500px; margin:20px auto;">
+                    <h3>Apa rasa favorit Cia?</h3>
+                    <input type="text" class="secret-input" id="video-guess" placeholder="Masukkan jawaban...">
+                    <button class="btn" onclick="checkVideoGuess()">Cek Jawaban</button>
+                    <p id="video-hint" style="display:none; margin-top:10px;">Hint: oreo</p>
+                </div>
+                <p>Ini adalah halaman rahasia untuk membuka video spesial!</p>
+            </div>
+        </div>
+
+        <!-- Halaman Penutup -->
+        <div class="page" id="closing-page">
+            <h2>Terima Kasih</h2>
+            <p>Telah menjadi bagian dari cerita indah ini. Semoga hari ulang tahunmu penuh dengan kebahagiaan dan kejutan menyenangkan!</p>
+            
+            <div style="margin: 30px 0;">
+                <div class="note">
+                    <h3>Apa warna favorit Cia?</h3>
+                    <input type="text" class="secret-input" id="color-guess" placeholder="Masukkan jawaban...">
+                    <button class="btn" onclick="checkColorGuess()">Cek Jawaban</button>
+                </div>
+            </div>
+            
+            <div style="overflow:hidden; height:500px; position:relative;">
+                <div id="scrolling-photos" style="position:absolute; width:100%;">
+                <div class="locked-photo-container">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/special-gift.jpg" 
+                         id="locked-photo" 
+                         class="locked"
+                         alt="Foto spesial terkunci">
+                    <div class="photo-lock">
+                        <h3>Foto Rahasia</h3>
+                        <p>Masukkan tanggal jadian untuk membuka</p>
+                        <input type="text" class="secret-input" id="photo-date-guess" placeholder="Format: DD-MM-YYYY">
+                        <button class="btn" onclick="checkPhotoAccess()">Buka Foto</button>
+                        <button class="btn download-btn" 
+                                id="download-btn" 
+                                onclick="downloadPhoto()" 
+                                style="display:none; background-color:#FF6B6B;">
+                            Download Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <style>
+            .locked-photo-container {
+                position: relative;
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .locked {
+                filter: blur(8px);
+                width: 100%;
+                border-radius: 10px;
+            }
+            
+            .photo-lock {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                background-color: rgba(255,255,255,0.9);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                width: 80%;
+                max-width: 400px;
+            }
+            
+            .secret-door-wrapper {
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 40px 20px;
+                text-align: center;
+            }
+            
+            .secret-door-input {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin-top: 30px;
+            }
+            
+            .secret-door-input input {
+                padding: 12px 15px;
+                border-radius: 25px;
+                border: 2px solid #4ECDC4;
+                width: 70%;
+                max-width: 300px;
+            }
+        </style>
+            
+            <div class="message-form">
+                <h3>Tinggalkan Pesan Untukku</h3>
+                <textarea id="user-message" placeholder="Tulis pesan spesialmu di sini..."></textarea>
+                <button class="btn" onclick="submitMessage()">Kirim Pesan</button>
+                <div id="message-success" style="display: none; color: green; margin-top: 10px;">
+                    Pesanmu telah terkirim! Terima kasih.
+                </div>
+            </div>
+            
+            <button class="btn" onclick="restartBook()">Baca Lagi dari Awal</button>
+        </div>
+    </div>
+    
+    <!-- Confirmation Dialog for Skip -->
+    <div class="confirmation-dialog" id="confirmationDialog">
+        <div class="confirmation-content">
+            <h3 id="confirmation-question">Yakin mau skip ini?</h3>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                <button class="btn" id="confirm-yes" style="background-color: #FF6B6B;">Ya</button>
+                <button class="btn" id="confirm-no">Tidak</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Page management
+        const pages = [
+            'init-page', 'cover-page', 'chapter1', 'content1', 'photo3', 
+            'photo5', 'photo4', 'photo4-video', 'content2', 'secret1', 
+            'secret2', 'secret3', 'secret-door', 'quiz-page', 'blank-page', 'closing-page'
+        ];
+        let currentPage = 0;
+        let clickedIcons = 0;
+        let pageToSkip = 0;
+        
+        // Initialize the book
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('init-page').classList.add('active');
+            
+            // Create hearts occasionally
+            setInterval(createHeart, 1000);
+        });
+        
+        // Icon click handler for initial page
+        function clickIcon(iconNum) {
+            if (clickedIcons >= 3) return;
+            
+            const icon = document.getElementById('icon' + iconNum);
+            icon.style.transform = 'scale(1.2) rotate(20deg)';
+            icon.style.backgroundColor = '#FF6B6B';
+            
+            // Add note
+            const notesContainer = document.getElementById('init-notes');
+            const note = document.createElement('div');
+            note.className = 'note';
+            
+            const notes = [
+                "Setiap klik membawamu lebih dekat ke kejutan...",
+                "Ingat baik-baik semua halaman yang kamu lihat...",
+                "Tanggal penting tersebar di seluruh buku ini..."
+            ];
+            
+            note.innerHTML = `<p>${notes[iconNum-1]}</p>`;
+            notesContainer.appendChild(note);
+            
+            clickedIcons++;
+            
+            if (clickedIcons === 3) {
+                setTimeout(() => {
+                    nextPage();
+                }, 1500);
+            }
+        }
+        
+        // Navigation functions
+        function nextPage() {
+            document.getElementById(pages[currentPage]).classList.remove('active');
+            currentPage++;
+            
+            if (currentPage >= pages.length) {
+                currentPage = 0;
+            }
+            
+            document.getElementById(pages[currentPage]).classList.add('active');
+            
+            // Special case for video page
+            if (pages[currentPage] === 'photo4-video') {
+                document.getElementById('video-lock').style.display = 'flex';
+                document.getElementById('secret-video').style.display = 'none';
+            }
+        }
+        
+        function prevPage() {
+            document.getElementById(pages[currentPage]).classList.remove('active');
+            currentPage--;
+            
+            if (currentPage < 0) {
+                currentPage = pages.length - 1;
+            }
+            
+            document.getElementById(pages[currentPage]).classList.add('active');
+        }
+        
+        function goToPage(pageName) {
+            document.getElementById(pages[currentPage]).classList.remove('active');
+            currentPage = pages.indexOf(pageName);
+            document.getElementById(pages[currentPage]).classList.add('active');
+        }
+        
+        // Skip confirmation
+        function showConfirmation(pageNum) {
+            pageToSkip = pageNum;
+            const dialog = document.getElementById('confirmationDialog');
+            const question = document.getElementById('confirmation-question');
+            
+            const questions = [
+                "Yakin mau skip ini?",
+                "Udah yakin nih?",
+                "Yaudah deh kalau kamu maksa bangetttt",
+                "Ucapan terima kasih sudah memilih"
+            ];
+            
+            let currentAttempt = 0;
+            
+            function askQuestion() {
+                if (currentAttempt >= questions.length) {
+                    // After all confirmations, skip the page
+                    skipCurrentPage();
+                    dialog.style.display = 'none';
+                    return;
+                }
+                
+                question.textContent = questions[currentAttempt];
+                
+                if (currentAttempt === 3) {
+                    question.textContent += " (Halaman " + (pageNum + 1) + ")";
+                }
+                
+                const confirmYes = document.getElementById('confirm-yes');
+                const confirmNo = document.getElementById('confirm-no');
+                
+                // Remove previous event listeners
+                confirmYes.onclick = null;
+                confirmNo.onclick = null;
+                
+                confirmYes.onclick = function() {
+                    currentAttempt++;
+                    askQuestion();
+                };
+                
+                confirmNo.onclick = function() {
+                    dialog.style.display = 'none';
+                };
+            }
+            
+            dialog.style.display = 'flex';
+            currentAttempt = 0;
+            askQuestion();
+        }
+        
+        function skipCurrentPage() {
+            // Skip to next page
+            nextPage();
+        }
+        
+        // Secret guessing functionality
+        function checkGuess(elementId, correctAnswer) {
+            const guess = document.getElementById(elementId).value.trim().toLowerCase();
+            const correct = correctAnswer.toLowerCase();
+            
+            if (guess === correct) {
+                alert("Jawaban benar! Kamu hebat!");
+            } else {
+                alert("Masih belum tepat. Coba lihat petunjuk di halaman-halaman sebelumnya.");
+            }
+        }
+        
+        function checkDoorAccess() {
+            const code = document.getElementById('secret-access').value.trim();
+            if (code === '03/12/2025') {
+                // Go directly to secret door page
+                goToPage('secret-door');
+            } else {
+                document.getElementById('door-hint').style.display = 'block';
+                document.getElementById('secret-access').value = '';
+                document.getElementById('secret-access').focus();
+            }
+        }
+
+        function checkSecretCode() {
+            const code = document.getElementById('secret-code').value.trim();
+            if (code === '03/12/2025') {
+                document.getElementById('bgMusic').pause();
+                document.getElementById('secretMusic').play();
+                nextPage();
+            } else {
+                document.getElementById('secret-hint').style.display = 'block';
+            }
+        }
+
+        function checkVideoGuess() {
+            const guess = document.getElementById('video-guess').value.trim().toLowerCase();
+            
+            if (guess === 'oreo') {
+                document.getElementById('video-lock').style.display = 'none';
+                document.getElementById('secret-video').style.display = 'block';
+                alert("Selamat! Video sekarang bisa ditonton.");
+            } else {
+                document.getElementById('video-hint').style.display = 'block';
+                alert("Jawaban salah. Coba lagi!");
+            }
+        }
+        
+        function checkVideoAccess() {
+            const guess = document.getElementById('video-date-guess').value.trim().toLowerCase();
+            
+            if (guess === '03-12-2025' || guess === '3-12-2025' || guess === '03/12/2025') {
+                document.getElementById('video-lock').style.display = 'none';
+                document.getElementById('secret-video').style.display = 'block';
+                document.getElementById('secret-video').controls = true;
+            } else {
+                alert("Tanggal belum tepat! Coba lagi");
+                const button = document.getElementById('video-date-guess');
+                button.value = '';
+                button.focus();
+            }
+        }
+        
+        // Message submission
+        function submitMessage() {
+            const message = document.getElementById('user-message').value;
+            
+            if (message.trim() === '') {
+                alert("Tulis pesan dulu ya!");
+                return;
+            }
+            
+            // In a real implementation, you would send this to a server
+            console.log("Pesan terkirim:", message);
+            
+            document.getElementById('message-success').style.display = 'block';
+            document.getElementById('user-message').value = '';
+            
+            setTimeout(() => {
+                document.getElementById('message-success').style.display = 'none';
+            }, 3000);
+        }
+        
+        // Restart book
+        function restartBook() {
+            document.getElementById('secretMusic').pause();
+            document.getElementById('bgMusic').currentTime = 0;
+            document.getElementById('bgMusic').play();
+            currentPage = 0;
+            clickedIcons = 0;
+            
+            // Hide all pages except init page
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('init-page').classList.add('active');
+            
+            // Reset initial icons and notes
+            for (let i = 1; i <= 3; i++) {
+                const icon = document.getElementById('icon' + i);
+                icon.style.transform = '';
+                icon.style.backgroundColor = '#FFD166';
+            }
+            
+            document.getElementById('init-notes').innerHTML = '';
+        }
+        
+        function checkColorGuess() {
+            const guess = document.getElementById('color-guess').value.trim().toLowerCase();
+            if (guess === 'biru') {
+                alert("Benar! Warna favorit Cia adalah biru");
+                nextPage();
+            } else {
+                alert("Salah, coba lagi!");
+            }
+        }
+
+        function checkPhotoAccess() {
+            const guess = document.getElementById('photo-date-guess').value.trim().toLowerCase();
+            
+            if (guess === '03-12-2025' || guess === '3-12-2025' || guess === '03/12/2025') {
+                document.getElementById('locked-photo').classList.remove('locked');
+                document.getElementById('photo-date-guess').style.display = 'none';
+                document.querySelector('.photo-lock button').style.display = 'none';
+                document.getElementById('download-btn').style.display = 'block';
+                document.querySelector('.photo-lock p').textContent = 'Foto rahasia terbuka!';
+            } else {
+                alert("Tanggal belum tepat! Coba lagi");
+            }
+        }
+
+        function downloadPhoto() {
+            // In real implementation this would download the photo
+            alert("Sedang mempersiapkan download foto spesial...");
+        }
+
+        // Create floating hearts
+        function checkSecretCode() {
+            const code = document.getElementById('secret-code').value.trim();
+            if (code === '03/12/2025') {
+                document.getElementById('bgMusic').pause();
+                document.getElementById('secretMusic').play();
+                nextPage();
+            } else {
+                document.getElementById('secret-hint').style.display = 'block';
+                document.getElementById('secret-code').value = '';
+                document.getElementById('secret-code').focus();
+            }
+        }
+
+        // Track correct answers
+        let correctAnswers = 0;
+        
+        function checkQuizAnswer(questionNum, correctAnswer) {
+            const guess = document.getElementById('quiz'+questionNum).value.trim().toLowerCase();
+            
+            if (guess === correctAnswer) {
+                correctAnswers++;
+                alert("Jawaban benar!");
+                
+                // If all 3 correct, show reward
+                if (correctAnswers === 3) {
+                    document.getElementById('quiz-reward').style.display = 'block';
+                    document.getElementById('quizMusic').play();
+                }
+            } else {
+                // Show hint
+                document.getElementById('hint'+questionNum).style.display = 'block';
+                const input = document.getElementById('quiz'+questionNum);
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function createHeart() {
+            if (Math.random() > 0.3) return;
+            
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            
+            // Random position at bottom of screen
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.bottom = '0';
+            
+            document.body.appendChild(heart);
+            
+            // Remove heart after animation completes
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
